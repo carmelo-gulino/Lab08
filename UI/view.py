@@ -43,7 +43,6 @@ class View(ft.UserControl):
 
         self._ddNerc = ft.Dropdown(label="Select NERC")
 
-
         self._txtYears = ft.TextField(label="Insert max years")
         self._txtHours = ft.TextField(label="Insert max hours")
         self._btnWorstCase = ft.ElevatedButton(text="Worst-Case analysis", on_click=self._controller.handleWorstCase)
@@ -51,7 +50,7 @@ class View(ft.UserControl):
         row1 = ft.Row([
             ft.Column([self._logo]),
             ft.Column([self._ddNerc, self._txtYears, self._txtHours, self._btnWorstCase], spacing=60)
-        ],alignment=ft.MainAxisAlignment.CENTER, spacing=30)
+        ], alignment=ft.MainAxisAlignment.CENTER, spacing=30)
         self._page.add(row1)
 
         self._controller.fillDD()
@@ -61,6 +60,14 @@ class View(ft.UserControl):
 
         self._page.add(self._txtOut)
 
+        self._page.update()
+
+    def print_massimo(self, best):
+        for soluzione in best:
+            self._txtOut.controls.append(ft.Text(f"Tot people affected: {soluzione[1]}"))
+            self._txtOut.controls.append(ft.Text(f"Tot hours of outage: {soluzione[2]}"))
+            for e in soluzione[0]:
+                self._txtOut.controls.append(ft.Text(e))
         self._page.update()
 
     @property

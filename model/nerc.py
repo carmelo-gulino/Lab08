@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Nerc:
     _id: int
@@ -18,5 +19,3 @@ class Nerc:
 
     def __hash__(self):
         return hash(self._id)
-
-

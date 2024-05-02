@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+
 @dataclass
 class Event:
     _id: int
@@ -54,7 +55,7 @@ class Event:
     def demand_loss(self):
         return self._demand_loss
 
-    def __str__(self):
+    def __repr__(self):
         # return (f"PowerOutage [id={self._id}, nerc={self._nerc_id}, customers_affected={self._customers_affected} "
         #         f"start_time={self._date_event_began}, end_time= {self._date_event_finished}]")
 
@@ -64,3 +65,5 @@ class Event:
     def __hash__(self):
         return hash(self._id)
 
+    def __eq__(self, other):
+        return self._id == other._id

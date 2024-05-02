@@ -1,5 +1,4 @@
 import flet as ft
-
 from model.nerc import Nerc
 
 
@@ -14,7 +13,18 @@ class Controller:
 
     def handleWorstCase(self, e):
         # TO FILL
-        pass
+        try:
+            nerc = self._idMap[f"{self._view._ddNerc.value}"]  #estraggo l'oggetto nerc
+            try:
+                x_anni = int(self._view._txtYears.value)  # estraggo gli anni
+                y_ore = int(self._view._txtHours.value)  # estraggo le ore
+                self._model.worstCase(nerc, x_anni, y_ore)
+                self._model.trova_massimo()
+                self._view.print_massimo(self._model._solBest)
+            except ValueError:
+                self._view.create_alert("Inserire un numero")
+        except KeyError:
+            self._view.create_alert("Selezionare tutti i campi")
 
     def fillDD(self):
         nercList = self._model.listNerc
