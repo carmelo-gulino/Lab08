@@ -13,18 +13,20 @@ class Controller:
 
     def handleWorstCase(self, e):
         # TO FILL
-        try:
-            nerc = self._idMap[f"{self._view._ddNerc.value}"]  #estraggo l'oggetto nerc
+        if self._view._ddNerc.value is None or self._view._txtYears.value is None or self._view._txtHours.value is None:
+            self._view.create_alert("Selezionare tutti i campi")
+        else:
+            nerc = self._idMap[f"{self._view._ddNerc.value}"]  # estraggo l'oggetto nerc
             try:
                 x_anni = int(self._view._txtYears.value)  # estraggo gli anni
                 y_ore = int(self._view._txtHours.value)  # estraggo le ore
-                self._model.worstCase(nerc, x_anni, y_ore)
-                self._model.trova_massimo()
-                self._view.print_massimo(self._model._solBest)
             except ValueError:
                 self._view.create_alert("Inserire un numero")
-        except KeyError:
-            self._view.create_alert("Selezionare tutti i campi")
+                return
+            self._model.worstCase(nerc, x_anni, y_ore)
+            self._model.trova_massimo()
+            self._view.print_massimo(self._model._solBest)
+            print(self._model.iterazioni)
 
     def fillDD(self):
         nercList = self._model.listNerc

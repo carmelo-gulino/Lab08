@@ -1,5 +1,5 @@
 import copy
-
+from functools import cache, lru_cache
 from database.DAO import DAO
 
 
@@ -10,17 +10,22 @@ class Model:
         self._listEvents = None
         self.loadNerc()
         self.soluzioni = []
+        self.iterazioni = 0
+        self.costo_cumulato = 0
 
     def worstCase(self, nerc, maxY, maxH):
         self._listEvents = []  #ogni volta che chiamo la funzione resetto la lista di eventi
         self.loadEvents(nerc)  #carico gli eventi che mi interessano a seconda del nerc scelto
+        self.costo_cumulato = 0
         self.ricorsione(set(), maxY, maxH, 0)  #parziale è una lista
 
     def ricorsione(self, parziale, maxY, maxH, pos):  #possibili è l'insieme totale di eventi
         # CASO BANALE
+        self.iterazioni += 1
         if pos == len(self._listEvents):  #se sono arrivato alla fine degli eventi aggiungo la soluzione trovata
-            sol = self.calcola_parametri(parziale)
-            self.soluzioni.append(copy.deepcopy(sol))
+            if self.is_nuova(parziale):
+                sol = self.calcola_parametri(parziale)
+                self.soluzioni.append(copy.deepcopy(sol))
         # CASO RICORSIVO
         else:
             for evento in self._listEvents[pos:]:
@@ -33,6 +38,8 @@ class Model:
     def condizioni(self, parziale, maxY, maxH):
         if self.condizione_durata(parziale, maxH) and self.condizione_anni(parziale, maxY):
             return True
+        else:
+            return False
 
     def condizione_durata(self, parziale, maxH):
         '''
@@ -99,12 +106,10 @@ class Model:
         if len(self.soluzioni) == 0:
             return True
         else:
-            for soluzione in self.soluzioni:
-                for evento in soluzione:
-                    for e in parziale:
-                        if e != evento:
-                            return True
-            return False
+            for sol in self.soluzioni:
+                if parziale == sol[0]:
+                    return False
+            return True
 
     def loadEvents(self, nerc):
         self._listEvents = DAO.getAllEvents(nerc)
