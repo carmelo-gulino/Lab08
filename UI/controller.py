@@ -24,7 +24,6 @@ class Controller:
                 self._view.create_alert("Inserire un numero")
                 return
             self._model.worstCase(nerc, x_anni, y_ore)
-            self._model.trova_massimo()
             self._view.print_massimo(self._model._solBest)
             print(self._model.iterazioni)
 

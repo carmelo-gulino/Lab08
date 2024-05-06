@@ -63,6 +63,7 @@ class View(ft.UserControl):
         self._page.update()
 
     def print_massimo(self, best):
+        self.clean_page()
         for soluzione in best:
             self._txtOut.controls.append(ft.Text(f"Tot people affected: {soluzione[1]}"))
             self._txtOut.controls.append(ft.Text(f"Tot hours of outage: {soluzione[2]}"))
@@ -88,4 +89,8 @@ class View(ft.UserControl):
         self._page.update()
 
     def update_page(self):
+        self._page.update()
+
+    def clean_page(self):
+        self._txtOut.controls.clear()
         self._page.update()
